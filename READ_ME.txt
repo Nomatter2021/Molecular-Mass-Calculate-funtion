@@ -1,0 +1,2 @@
+HOW TO USE MOLECULER MASS CACULATION?
+You just put this 3 files to the folder that you working in and then include the MMC.h fil in header after that just call M_mass_cal function as M_mass_cal(Chemical formular) this function will return the result in float type.

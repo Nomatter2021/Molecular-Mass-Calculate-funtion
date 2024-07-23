@@ -9,6 +9,8 @@ void fagment(std::string &fg, std::string &mg, std::string &lg, std::string nm);
 void brk(std::string nm, std::map<std::string, int> &store, int p);
 void str(std::string nm, int p, int m, std::map<std::string, int> &store);
 void load_periodic(std::map<std::string, float> &periodic);
+void check(int &n, std::string &o, int &m, std::string nm);
+void loadm(int &n, int &m, int i, std::string nm);
 float cal_chem(std::map<std::string, float> periodic, std::map<std::string, int> store);
 float M_mass_cal(std::string nm);
 
@@ -22,7 +24,19 @@ float M_mass_cal(std::string nm)
 	fagment(fg, mg, lg, nm);
 	if(isdigit(lg[0]) == 1)
 	{
-		p *= std::stoi(lg.substr(0, 1));
+		int i{1};
+		while(true)
+		{
+			if(isdigit(lg[i]) == 1)
+			{
+				i++;
+			}
+			else
+			{
+				p *= std::stoi(lg.substr(0, i));
+				break;
+			}
+		};
 		brk(fg, store, 1);
 		brk(mg, store, p);
 		brk(lg, store, 1);
@@ -32,6 +46,7 @@ float M_mass_cal(std::string nm)
 		brk(fg, store, 1);
 		brk(mg, store, 1);
 	};
+
 	load_periodic(per);
 	return cal_chem(per, store);
 };
@@ -80,21 +95,39 @@ void fagment(std::string &fg, std::string &mg, std::string &lg, std::string nm)
 	};
 };
 
+
 void brk(std::string nm, std::map<std::string, int> &store, int p)
 {
 	std::string o;
 	int n{0};
 	int i{static_cast <int> (nm.length())};
-	if(isdigit(nm[0]) == 1)
+	if(isdigit(nm[n]) == 1)
 	{
-		n += 1;
+		for(int i{0}; i < static_cast<int>(nm.length()); i++)
+		{
+			if(isdigit(nm[i] == 1))
+			{
+				i++;
+			}
+			else
+			{
+				n += i;
+			};
+		};
 	};
 	while(n <= i - 1)
 	{
 		int m{1};
 		if(isupper(nm[n]) == 1)
 		{
-			if(isdigit(nm[n + 1]) == 0)
+			if(isdigit(nm[n + 1]) == 1)
+			{
+				//Tại đây nguyên tố có một ký tự và có kèm số lượng
+				o = nm.substr(n, 1);
+				loadm(n, m, 1, nm);
+				str(o, p, m, store);
+			}
+			else
 			{
 				if(isupper(nm[n + 1]) == 1)
 				{
@@ -109,9 +142,8 @@ void brk(std::string nm, std::map<std::string, int> &store, int p)
 					{
 						//Tại đây nguyên tố có hai ký tự và có kèm số lượng
 						o = nm.substr(n, 2);
-						m *= std::stoi(nm.substr(n + 2, 1));
+						loadm(n, m, 2, nm);
 						str(o, p, m, store);
-						n += 3;
 					}
 					else
 					{
@@ -121,14 +153,6 @@ void brk(std::string nm, std::map<std::string, int> &store, int p)
 						n += 2;
 					};
 				};
-			}
-			else
-			{
-				//Tại đây nguyên tố có một ký tự và có kèm số lượng
-				o = nm.substr(n, 1);
-				m *= std::stoi(nm.substr(n + 1, 1));
-				str(o, p, m, store);
-				n += 2;
 			};
 		}
 		else
@@ -138,9 +162,9 @@ void brk(std::string nm, std::map<std::string, int> &store, int p)
 			str(o, p, m, store);
 			n += 1;
 		};
-	};
-				
+	};			
 };
+
 
 void str(std::string nm, int p, int m, std::map<std::string, int> &store)
 {
@@ -172,6 +196,7 @@ void load_periodic(std::map<std::string, float> &periodic)
 	outfile.close();
 };
 
+
 float cal_chem(std::map<std::string, float> periodic, std::map<std::string, int> store)
 {
 	float r{0};
@@ -181,4 +206,23 @@ float cal_chem(std::map<std::string, float> periodic, std::map<std::string, int>
 	};
 	return r;
 };
-	
+
+
+void loadm(int &n, int &m, int i, std::string nm)
+{
+	int l{static_cast<int>(nm.length())};
+	n += i;
+	while(n < l)
+	{
+		if(isdigit(nm[n + i]) == 1)
+		{
+			i++;
+		}
+		else
+		{
+			m *= std::stoi(nm.substr(n, i));
+			n += i;
+			break;
+		};
+	};
+};
