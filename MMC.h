@@ -9,18 +9,27 @@ void fagment(std::string &fg, std::string &mg, std::string &lg, std::string nm);
 void brk(std::string nm, std::map<std::string, int> &store, int p);
 void str(std::string nm, int p, int m, std::map<std::string, int> &store);
 void load_periodic(std::map<std::string, float> &periodic);
-void check(int &n, std::string &o, int &m, std::string nm);
+void check(int i, std::string nm, std::map<std::string, int> &store);
 void loadm(int &n, int &m, int i, std::string nm);
 float cal_chem(std::map<std::string, float> periodic, std::map<std::string, int> store);
-float M_mass_cal(std::string nm);
+float Mass(std::string nm);
 
 
-float M_mass_cal(std::string nm)
+float Mass(std::string nm)
 {
 	std::map <std::string, int> store;
 	std::map <std::string, float> per;
 	std::string fg, mg, lg;
-	int p{1}, key;
+	int p{1}, key, l{static_cast<int>(nm.length())};
+	for(int i{0}; i < l; i++)
+	{
+		if(nm[i] == '.')
+		{
+			check(i, nm, store);
+			nm = nm.substr(0, i);
+			break;
+		};	
+	};
 	fagment(fg, mg, lg, nm);
 	if(isdigit(lg[0]) == 1)
 	{
@@ -222,6 +231,24 @@ void loadm(int &n, int &m, int i, std::string nm)
 		{
 			m *= std::stoi(nm.substr(n, i));
 			n += i;
+			break;
+		};
+	};
+};
+
+void check(int i, std::string nm, std::map<std::string, int> &store)
+{
+	int j{i+1};
+	while(true)
+	{
+		if(isdigit(nm[j] == 1))
+		{
+			j++;
+		}
+		else
+		{
+			store.insert(std::make_pair("H", 2*std::stoi(nm.substr(i + 1, j - i + 1))));
+			store.insert(std::make_pair("O", std::stoi(nm.substr(i + 1, j - i + 1))));
 			break;
 		};
 	};
